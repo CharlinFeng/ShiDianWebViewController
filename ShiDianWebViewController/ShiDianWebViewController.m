@@ -79,8 +79,18 @@
         return;
     }
     
-    if([currentURL_temp isEqualToString:@"https://so.m.jd.com/solocalocalstorage.html"]) {
+    if([currentURL_temp containsString:@"shidian"]) {
+        
         decisionHandler(WKNavigationActionPolicyCancel);
+        
+        if([currentURL_temp containsString:@"back"]) {
+            [self back];
+        }
+        
+        if([currentURL_temp containsString:@"pop"]) {
+            [self popOut];
+        }
+        
         return;
     }
     
@@ -97,10 +107,14 @@
         
     }else {
         
-        [self.view transitionWithAnimType:TransitionAnimTypePush subType:TransitionSubtypeRight curve:TransitionCurveEaseOut duration:0.45];
+        if([currentURL_temp containsString:@"left"]) {
+            
+            [self.view transitionWithAnimType:TransitionAnimTypePush subType:TransitionSubtypeLeft curve:TransitionCurveEaseOut duration:0.45];
+        }else {
+            [self.view transitionWithAnimType:TransitionAnimTypePush subType:TransitionSubtypeRight curve:TransitionCurveEaseOut duration:0.45];
+        }
+        
     }
-    
-    
     
     
     self.currentURL = currentURL_temp;
@@ -168,5 +182,22 @@
 }
 
 
+
+-(void)back{
+    
+    if(self.webview.canGoBack) {
+    
+        [self.webview goBack];
+        
+    }else {
+        
+        [self popOut];
+    }
+}
+
+-(void)popOut{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end
